@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>CLARO POC Script</title>
+
+</head>
+<body>
+
+<div id="jwplayer_container"></div>
+
+<script type='text/javascript'>
+
+media_key = "t4g1XIFk";
+player_key = "VLGSv2r0"; 
+
+var url = "https://w73pkzviz9.execute-api.us-east-1.amazonaws.com/default/buildTokenNonJWT";
+var params = "media_id=" + media_key + "&player_id=" + player_key;
+var xhttp = new XMLHttpRequest();
+
+xhttp.open("GET", url+"?"+params, true);
+xhttp.onreadystatechange = function()
+{
+    if(xhttp.readyState == 4 && xhttp.status == 200) {
+        var uri_dec = decodeURIComponent(xhttp.responseText);
+        console.log(uri_dec);
+
+        function injectScript(playlist) {
+        	const divString = "botr_" + media_key + "_" + player_key + "_div";
+		    g = document.createElement('div');
+		    g.setAttribute("id", divString);
+		    if(!document.getElementById(divString)) {
+		    	document.getElementById("jwplayer_container").appendChild(g);
+			}
+			
+		    const playerScript = document.createElement("script");
+		    playerScript.type = "text/javascript";
+		    playerScript.src = playlist;
+		    document.getElementById(divString).appendChild(playerScript);
+		}
+
+		injectScript(uri_dec);
+
+    }
+}
+
+xhttp.send(null);
+
+</script>
+
+</body>
+</html>

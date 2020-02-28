@@ -1,0 +1,56 @@
+<div id="jwplayer_container"></div>
+<script type='text/javascript'>
+
+function getQueryStringValue (key) {  
+  return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));  
+}  
+
+var media_key = getQueryStringValue("media"); 
+var player_key = getQueryStringValue("player"); 
+var playlist_key = getQueryStringValue("playlist"); 
+
+var url = "https://w73pkzviz9.execute-api.us-east-1.amazonaws.com/default/buildTokenNonJWT";
+var params = "media_id=" + media_key + "&player_id=" + player_key + "&playlist_id" + playlist_key;
+var xhttp = new XMLHttpRequest();
+xhttp.open("GET", url+"?"+params, true);
+xhttp.onreadystatechange = function()
+{
+    if(xhttp.readyState == 4 && xhttp.status == 200) {
+        var myArray = xhttp.responseText.split(",");
+        var content = myArray[0];
+		var player = myArray[1];
+        console.log(content);
+        console.log(player);
+
+        function injectScript(player) {
+        	const divString = "jwp";
+		    g = document.createElement('div');
+		    g.setAttribute("id", divString);
+		    if(!document.getElementById(divString)) {
+		    	document.getElementById("jwplayer_container").appendChild(g);
+			}
+		    const playerScript = document.createElement("script");
+		    playerScript.type = "text/javascript";
+		    playerScript.src = player;
+            document.head.append(playerScript);
+
+		}
+
+		function buildJWP(content, jwplayer){
+
+			let jwp = jwplayer('jwp');
+
+			jwp.setup({
+				playlist: content
+			})
+
+		}
+
+		injectScript(player);
+		
+		//we need a promise, or to confirm jwplayer exists before calling
+		buildJWP(content);
+    }
+}
+xhttp.send(null);
+</script>
