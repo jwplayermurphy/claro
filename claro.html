@@ -1,4 +1,4 @@
-<div id="jwplayer_container"></div>
+<div id="jwplayer_video_container"></div>
 <script type='text/javascript'>
 
 function getQueryStringValue (key) {  
@@ -27,7 +27,7 @@ xhttp.onreadystatechange = function()
 		    g = document.createElement('div');
 		    g.setAttribute("id", divString);
 		    if(!document.getElementById(divString)) {
-		    	document.getElementById("jwplayer_container").appendChild(g);
+		    	document.getElementById("jwplayer_video_container").appendChild(g);
 			}
 		    const playerScript = document.createElement("script");
 		    playerScript.type = "text/javascript";
